@@ -11,7 +11,6 @@ echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n
 echo "HINWEIS: BITTE DAS SPALTENTRENNZEICHEN KONTROLLIEREN UND GGF. ANPASSEN!\n";
 echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
 echo "\n";
-usleep(2000000);
 $csv_datei = "newSimulationData.csv";
 $spaltenTrennzeichen = ",";
 $zeilenTrennzeichen = "\n";
@@ -19,7 +18,20 @@ $kontrollAbbruchszahl = -1;
 /** Anzahl der zu untersuchenden Datensätze zur Kontrolle */
 /** negative Zahl sorgt dafür, dass alle Daten durchlaufen werden */
 $kontrollZeitInMilliSekunden = 0 * 2000;
-$kontrollSpaltenNummer = 11;
+$kontrollSpaltenBezeichnung = "Versandprodukt";
+$kontrollSpaltenNummer = 1;
+# wir zählen die Spalten 1-basiert
+$readFile = fopen($csv_datei, 'r');
+$spaltenNamen = fgetcsv($readFile);
+foreach ($spaltenNamen as $spaltenName) {
+    if (strpos($spaltenName, $kontrollSpaltenBezeichnung) === false) {
+        ++$kontrollSpaltenNummer;
+    } else {
+        break;
+    }
+}
+echo "KontrollspaltenNummer: " . $kontrollSpaltenNummer;
+#usleep(3000000);
 # kontrollSpaltenNummer enthält die Spalte (1 basiert gezählt) mit den zu suchenden Keywords
 $counter = 0;
 $kontrollString01 = "Standard";
